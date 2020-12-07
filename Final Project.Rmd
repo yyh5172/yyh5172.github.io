@@ -22,8 +22,7 @@ library(knitr)
 library(mosaic)
 library(ggplot2)
 library(usmap)
-library(rpart.plot)
-library(rpart)
+library(ggdendro)
 ```
 
 
@@ -435,6 +434,26 @@ StatesReport_Comparison %>%
 ggsave("StatesReportComparison.png", height = 8, width = 16)
 ```
 
+4. 2016 States Report Dendrogram
+```{r, message = FALSE, warming = FALSE, fig.height = 6, fig.width = 8, fig.align = 'center'}
+StatesReport2016_Clean2 <-
+  na.omit(StatesReport2016_Clean)
+
+StatesReport2016_Clean2$`State/Area` = as.numeric(as.factor(StatesReport2016_Clean2$`State/Area`))
+
+row.names(StatesReport2016_Clean2) <- c("Alabama", "Alaska", "Arizona", "Arkansas", "Colorado", "Connecticut", "Delaware", "Georgia", "Hawaii", "Idaho", "Illinois", "Indiana", "Iowa", "Kansas", "Kentucky", "Louisiana", "Maine", "Massachusetts", "Michigan", "Minnesota", "Mississippi", "Missouri", "Montana", "Nebraska", "Nevada", "New Jersey", "New Mexico", "New York", "North Carolina", "North Dakota", "Ohio", "Oklahoma", "Oregon", "Pennsylvania", "Rhode Island", "South Carolina", "South Dakota", "Tennessee", "Texas", "Utah", "Vermont", "Virginia", "Washington", "West Virginia", "Wisconsin")
+
+Distance <-
+  dist(scale(StatesReport2016_Clean2), method = "euclidean")
+
+Dendrogram <-
+  hclust(Distance, method = "ward.D2")
+
+ggdendrogram(Dendrogram)
+
+ggsave("2016StatesReportDendrogram.png", height = 6, width = 8)
+```
+
 #### 4. No Trap Law States Report Comparison
 
 **Variables**
@@ -454,7 +473,7 @@ NoTrapLaw_StatesReport_2016 <-
   mutate(Year = rep(x = "2016", times = 6))
 
 NoTrapLawStates_Comparison <-
-  rbind(SixStatesReport_2015, SixStatesReport_2016) %>%
+  rbind(NoTrapLaw_StatesReport_2015, NoTrapLaw_StatesReport_2016) %>%
   pivot_longer(cols = c(`Residence Number`, `Occurrence Number`), names_to = "State Report", values_to = "Count")
 
 NoTrapLawStates_Comparison %>%
@@ -538,6 +557,8 @@ NoTrapLaw_AgeGroup_Comparison %>%
 
 ggsave("NoTrapLawAgeGroupComparison.png", height = 6, width = 8)
 ```
+
+
 
 
 
