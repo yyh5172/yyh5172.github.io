@@ -468,7 +468,40 @@ AgeGroup_Comparison_USA %>%
 ggsave("AgeGroupComparison_USA.png", height = 8, width = 10)
 ```
 
+#### 5. Age Group Comparison in Pennsylvania
 
+**Variables**
+
+* `State/Area`
+* `Total abortions reported by known age`
+* `Year`
+* `Age Group`
+* `Count`
+```{r, message = FALSE, warming = FALSE, fig.height = 8, fig.width = 10, fig.align = 'center'}
+PA2015_AgeGroup <-
+  AgeGroup2015_Clean %>%
+  filter(`State/Area` == "Pennsylvania")
+
+PA2016_AgeGroup <-
+  AgeGroup2016_Clean %>%
+  filter(`State/Area` == "Pennsylvania")
+
+AgeGroup_Comparison_PA <-
+  rbind(PA2015_AgeGroup, PA2016_AgeGroup) %>%
+  select(`State/Area`, `Age group yrs (<15)`,`Age group yrs (15–19)`, `Age group yrs (20–24)`, `Age group yrs (25–29)`, `Age group yrs (30–34)`, `Age group yrs (35–39)`, `Age group yrs (>=40)` ) %>%
+  mutate(Year = c("2015", "2016")) %>%
+  pivot_longer(cols = c(`Age group yrs (<15)`, `Age group yrs (15–19)`, `Age group yrs (20–24)`, `Age group yrs (25–29)`, `Age group yrs (30–34)`, `Age group yrs (35–39)`, `Age group yrs (>=40)`), names_to ="Age Group", values_to = "Count")
+kable(AgeGroup_Comparison_PA)
+
+AgeGroup_Comparison_PA %>%
+  ggplot(aes(x = `Age Group`, y = Count)) +
+  geom_bar(stat = "identity", position = 'dodge', aes(color = `Age Group`, fill = `Age Group`, alpha = 0.25)) +
+  labs(title = "Age Group Comparison 2015 & 2016 in Pennsylvania") +
+  theme(axis.text.x = element_text(angle = 60, hjust = 1), legend.position = "bottom", legend.background = element_rect(fill = "#e6e6ff", size = 0.5, linetype = "solid")) +
+  facet_wrap( ~ Year )
+
+ggsave("AgeGroupComparison_PA.png", height = 8, width = 10)
+```
 
 
 
