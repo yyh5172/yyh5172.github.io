@@ -360,7 +360,37 @@ ggsave("TrapLaws_Map.png", height = 15, width = 12)
 * **Trap Laws have been popularized across USA since 2007 and reached peak in 2016(Trump’s administration tried to push back Roe v. Wade)**
 * **Up to 2016, There are only 6 remaining States that do not have anti-choice laws against abortion: Oregon, Montana, Colorado, West Virginia, Vermont, New Hampshire**
 
+#### 2. Annual Report
 
+**Variables**
+
+* `Year`
+* `Selected reporting areas Number`
+* `Continuously reporting areas Number`
+```{r, message = FALSE, message = FALSE}
+AnnualReport_Clean %>%
+  select(`Selected reporting areas Number`) %>%
+  summarise(total = sum(`Selected reporting areas Number`), max_selected = max(`Selected reporting areas Number`), selected = min(`Selected reporting areas Number`), mean_selected = mean(`Selected reporting areas Number`))
+
+AnnualReport_Clean %>%
+  select(`Continuously reporting areas Number`) %>%
+  summarise(total = sum(`Continuously reporting areas Number`), max_continuoulsy = max(`Continuously reporting areas Number`), min_continuously = min(`Continuously reporting areas Number`), mean_continuously = mean(`Continuously reporting areas Number`))
+```
+
+```{r, message = FALSE, warning = FALSE, fig.height = 8, fig.width = 10, fig.align = 'center'}
+AnnualReport_Clean %>%
+  ggplot(aes(x = Year)) +
+  geom_line(aes(y = `Selected reporting areas Number`, group = 1, color = "red")) +
+  geom_point(aes(y = `Selected reporting areas Number`, group = 1, color = "red")) +
+  geom_line(aes(y = `Continuously reporting areas Number`, group = 1, color = "blue")) +
+  geom_point(aes(y = `Continuously reporting areas Number`, group = 1, color = "blue")) +
+  labs(title = "Reported Legal Abortion 2007-2016", col = "Areas") +
+  scale_color_manual(labels = c("Selected reporting areas Number", "Continuously reporting areas Number"), values = c("red", "blue")) +
+  scale_y_continuous(name = "Selected reporting areas", sec.axis = sec_axis((~ . + 10), name = "Continuously reporting areas")) +
+  theme(legend.position = "right", legend.background = element_rect(fill = "#e6e6ff", size = 0.5, linetype = "solid")) +
+
+ggsave("AnnualReport.png", height = 8, width = 10)
+```
 
 
 
