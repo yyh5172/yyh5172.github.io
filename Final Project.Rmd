@@ -392,6 +392,48 @@ AnnualReport_Clean %>%
 ggsave("AnnualReport.png", height = 8, width = 10)
 ```
 
+#### 3. States Report Comparison
+
+**Variables**
+
+* `State/Area`
+* `Residence Number`
+* `Occurrence Number`
+```{r, message = FALSE, message = FALSE}
+StatesReport2015_Clean %>%
+  select(`Residence Number`, `Occurrence Number`) %>%
+  na.omit() %>%
+  summarise(max_residence = max(`Residence Number`), min_residence = min(`Residence Number`), mean_residence = mean(`Residence Number`), max_occurrence = max(`Occurrence Number`), min_occurrence = min(`Occurrence Number`), mean_occurence = mean(`Occurrence Number`))
+
+StatesReport2016_Clean %>%
+  select(`Residence Number`, `Occurrence Number`) %>%
+  na.omit() %>%
+  summarise(max_residence = max(`Residence Number`), min_residence = min(`Residence Number`), mean_residence = mean(`Residence Number`), max_occurrence = max(`Occurrence Number`), min_occurrence = min(`Occurrence Number`), mean_occurence = mean(`Occurrence Number`))
+```
+
+```{r, message = FALSE, warming = FALSE, fig.height = 8, fig.width = 16, fig.align = 'center'}
+StatesReport2015_Clean_Year <-
+  StatesReport2015_Clean %>%
+  mutate(Year = rep(x = "2015", times = 53))
+
+StatesReport2016_Clean_Year <-
+  StatesReport2016_Clean %>%
+  mutate(Year = rep(x ="2016", times = 53))
+
+StatesReport_Comparison <-
+  rbind(StatesReport2015_Clean_Year, StatesReport2016_Clean_Year) %>%
+  pivot_longer(cols = c(`Residence Number`, `Occurrence Number`), names_to = "State Report", values_to = "Count")
+
+StatesReport_Comparison %>%
+  na.omit() %>%
+  ggplot(aes(x = `State/Area`, y = Count)) +
+  geom_bar(stat = "identity", position = 'dodge', aes(color = `State Report`, fill = `State Report`, alpha = 0.25)) +
+  labs(title = "States Report Comparison 2015 & 2016") +
+  theme(axis.text.x = element_text(angle = 60, hjust = 1), legend.position = "bottom", legend.background = element_rect(fill = "#e6e6ff", size = 0.5, linetype = "solid")) +
+  facet_grid(Year ~.)
+
+ggsave("StatesReportComparison.png", height = 8, width = 16)
+```
 
 
 
