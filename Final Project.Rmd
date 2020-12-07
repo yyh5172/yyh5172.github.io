@@ -34,6 +34,39 @@ library(rpart)
 * Trap Law: Targeted restrictions on abortion providers (TRAP) laws are costly, severe, and medically unnecessary requirements imposed on abortion providers and woman's health centers. Often pushed by anti-abortion politicians under the guise of "woman's health," the real aim of TRAP laws is to shut down abortion providers and make it more difficult for people to access abortion.
 
 
+# Data Access
+
+### Import Data Source
+
+#### 1. Abortion Surveillance — United States, 2015
+```{r, message = FALSE, warning = FALSE}
+# Assign the url for source 1 to variable url1
+url1 <- "https://www.cdc.gov/mmwr/volumes/67/ss/ss6713a1.htm?fbclid=IwAR1RVZmh6lh4UWS6z6jL_fwbVm0pfCJ9H9azAK8TLS5hwyss-8qMi5uG9vo"
+
+# Scrape all HTML tables found on the web page into a "list" object named Abortion2015 in the R environment
+Abortion2015 <- url1 %>%
+  read_html(header = TRUE) %>%
+  html_nodes(css = "table") %>%
+  html_table(fill = TRUE)
+```
+
+#### 2. Abortion Surveillance — United States, 2016
+```{r, message = FALSE, warning = FALSE}
+# Assign the url for source 2 to variable url2
+url2 <- "https://www.cdc.gov/mmwr/volumes/68/ss/ss6811a1.htm#T1_down"
+
+# Scrape all HTML tables found on the web page into a "list" object named Abortion2016 in the R environment
+Abortion2016 <- url2 %>%
+  read_html(header = TRUE) %>%
+  html_nodes(css = "table") %>%
+  html_table(fill = TRUE)
+```
+
+#### 3. Anti_Choice Law by States
+```{r, message = FALSE, warning = FALSE}
+# Use function read-excel from package readxl to read a local excel file into an R object named TrapLaw
+TrapLaw <- read_excel("/Users/yiwen/Desktop/FALL 2020/STAT 184/Final Project/TrapLaw.xlsx")
+```
 
 
 

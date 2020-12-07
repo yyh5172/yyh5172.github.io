@@ -1793,11 +1793,62 @@ library(rpart)</code></pre>
 <ul>
 <li>Trap Law: Targeted restrictions on abortion providers (TRAP) laws are costly, severe, and medically unnecessary requirements imposed on abortion providers and woman’s health centers. Often pushed by anti-abortion politicians under the guise of “woman’s health,” the real aim of TRAP laws is to shut down abortion providers and make it more difficult for people to access abortion.</li>
 </ul>
+</div>
+</div>
+<div id="data-access" class="section level1">
+<h1>Data Access</h1>
+<div id="import-data-source" class="section level3">
+<h3>Import Data Source</h3>
+<div id="abortion-surveillance-united-states-2015" class="section level4">
+<h4>1. Abortion Surveillance — United States, 2015</h4>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyBBc3NpZ24gdGhlIHVybCBmb3Igc291cmNlIDEgdG8gdmFyaWFibGUgdXJsMVxudXJsMSA8LSBcImh0dHBzOi8vd3d3LmNkYy5nb3YvbW13ci92b2x1bWVzLzY3L3NzL3NzNjcxM2ExLmh0bT9mYmNsaWQ9SXdBUjFSVlptaDZsaDRVV1M2ejZqTF9md2JWbTBwZkNKOUg5YXpBSzhUTFM1aHd5c3MtOHFNaTV1Rzl2b1wiXG5cbiMgU2NyYXBlIGFsbCBIVE1MIHRhYmxlcyBmb3VuZCBvbiB0aGUgd2ViIHBhZ2UgaW50byBhIFwibGlzdFwiIG9iamVjdCBuYW1lZCBBYm9ydGlvbjIwMTUgaW4gdGhlIFIgZW52aXJvbm1lbnRcbkFib3J0aW9uMjAxNSA8LSB1cmwxICU+JVxuICByZWFkX2h0bWwoaGVhZGVyID0gVFJVRSkgJT4lXG4gIGh0bWxfbm9kZXMoY3NzID0gXCJ0YWJsZVwiKSAlPiVcbiAgaHRtbF90YWJsZShmaWxsID0gVFJVRSlcbmBgYCJ9 -->
+<pre class="r"><code># Assign the url for source 1 to variable url1
+url1 &lt;- &quot;https://www.cdc.gov/mmwr/volumes/67/ss/ss6713a1.htm?fbclid=IwAR1RVZmh6lh4UWS6z6jL_fwbVm0pfCJ9H9azAK8TLS5hwyss-8qMi5uG9vo&quot;
+
+# Scrape all HTML tables found on the web page into a &quot;list&quot; object named Abortion2015 in the R environment
+Abortion2015 &lt;- url1 %&gt;%
+  read_html(header = TRUE) %&gt;%
+  html_nodes(css = &quot;table&quot;) %&gt;%
+  html_table(fill = TRUE)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+</div>
+<div id="abortion-surveillance-united-states-2016" class="section level4">
+<h4>2. Abortion Surveillance — United States, 2016</h4>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyBBc3NpZ24gdGhlIHVybCBmb3Igc291cmNlIDIgdG8gdmFyaWFibGUgdXJsMlxudXJsMiA8LSBcImh0dHBzOi8vd3d3LmNkYy5nb3YvbW13ci92b2x1bWVzLzY4L3NzL3NzNjgxMWExLmh0bSNUMV9kb3duXCJcblxuIyBTY3JhcGUgYWxsIEhUTUwgdGFibGVzIGZvdW5kIG9uIHRoZSB3ZWIgcGFnZSBpbnRvIGEgXCJsaXN0XCIgb2JqZWN0IG5hbWVkIEFib3J0aW9uMjAxNiBpbiB0aGUgUiBlbnZpcm9ubWVudFxuQWJvcnRpb24yMDE2IDwtIHVybDIgJT4lXG4gIHJlYWRfaHRtbChoZWFkZXIgPSBUUlVFKSAlPiVcbiAgaHRtbF9ub2Rlcyhjc3MgPSBcInRhYmxlXCIpICU+JVxuICBodG1sX3RhYmxlKGZpbGwgPSBUUlVFKVxuYGBgIn0= -->
+<pre class="r"><code># Assign the url for source 2 to variable url2
+url2 &lt;- &quot;https://www.cdc.gov/mmwr/volumes/68/ss/ss6811a1.htm#T1_down&quot;
+
+# Scrape all HTML tables found on the web page into a &quot;list&quot; object named Abortion2016 in the R environment
+Abortion2016 &lt;- url2 %&gt;%
+  read_html(header = TRUE) %&gt;%
+  html_nodes(css = &quot;table&quot;) %&gt;%
+  html_table(fill = TRUE)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+</div>
+<div id="anti_choice-law-by-states" class="section level4">
+<h4>3. Anti_Choice Law by States</h4>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyBVc2UgZnVuY3Rpb24gcmVhZC1leGNlbCBmcm9tIHBhY2thZ2UgcmVhZHhsIHRvIHJlYWQgYSBsb2NhbCBleGNlbCBmaWxlIGludG8gYW4gUiBvYmplY3QgbmFtZWQgVHJhcExhd1xuVHJhcExhdyA8LSByZWFkX2V4Y2VsKFwiL1VzZXJzL3lpd2VuL0Rlc2t0b3AvRkFMTCAyMDIwL1NUQVQgMTg0L0ZpbmFsIFByb2plY3QvVHJhcExhdy54bHN4XCIpXG5gYGAifQ== -->
+<pre class="r"><code># Use function read-excel from package readxl to read a local excel file into an R object named TrapLaw
+TrapLaw &lt;- read_excel(&quot;/Users/yiwen/Desktop/FALL 2020/STAT 184/Final Project/TrapLaw.xlsx&quot;)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
 <!-- rnb-text-end -->
 </div>
 </div>
+</div>
 
-<div id="rmd-source-code">LS0tDQp0aXRsZTogIlNUQVQgMTg0IEZpbmFsIFByb2plY3QiDQphdXRob3I6ICJZaXdlbiBIdWFuZyINCmRhdGU6ICJTdW5kYXkgYnkgMTE6NTlwbSINCm91dHB1dDogaHRtbF9ub3RlYm9vaw0KLS0tDQoNCg0KIyBTZXQgVXANCmBgYHtyLCBtZXNzYWdlID0gRkFMU0UsIHdhcm5pbmcgPSBGQUxTRX0NCiMgY2xlYW4gdXAgd29ya3NwYWNlIGVudmlyb25tZW50DQpybShsaXN0ID0gbHMoKSkNCg0KIyBhbGwgcGFja2FnZXMgdXNlZCBmb3IgdGhlIGFzc2lnbm1lbnQNCmxpYnJhcnkoRGF0YUNvbXB1dGluZykNCmxpYnJhcnkobW9zYWljKQ0KbGlicmFyeSh0aWR5dmVyc2UpDQpsaWJyYXJ5KGx1YnJpZGF0ZSkNCmxpYnJhcnkocmVhZHhsKQ0KbGlicmFyeShydmVzdCkNCmxpYnJhcnkoa25pdHIpDQpsaWJyYXJ5KG1vc2FpYykNCmxpYnJhcnkoZ2dwbG90MikNCmxpYnJhcnkodXNtYXApDQpsaWJyYXJ5KHJwYXJ0LnBsb3QpDQpsaWJyYXJ5KHJwYXJ0KQ0KYGBgDQoNCg0KIyBSZXNlYXJjaCBRdWVzdGlvbg0KDQojIyMgQXJlIFRyYXAgTGF3cyBhc3NvY2lhdGVkIHdpdGggbG93ZXIgcmVwb3J0ZWQgbGVnYWwgYWJvcnRpb24gbnVtYmVyPw0KDQoqIFRyYXAgTGF3OiBUYXJnZXRlZCByZXN0cmljdGlvbnMgb24gYWJvcnRpb24gcHJvdmlkZXJzIChUUkFQKSBsYXdzIGFyZSBjb3N0bHksIHNldmVyZSwgYW5kIG1lZGljYWxseSB1bm5lY2Vzc2FyeSByZXF1aXJlbWVudHMgaW1wb3NlZCBvbiBhYm9ydGlvbiBwcm92aWRlcnMgYW5kIHdvbWFuJ3MgaGVhbHRoIGNlbnRlcnMuIE9mdGVuIHB1c2hlZCBieSBhbnRpLWFib3J0aW9uIHBvbGl0aWNpYW5zIHVuZGVyIHRoZSBndWlzZSBvZiAid29tYW4ncyBoZWFsdGgsIiB0aGUgcmVhbCBhaW0gb2YgVFJBUCBsYXdzIGlzIHRvIHNodXQgZG93biBhYm9ydGlvbiBwcm92aWRlcnMgYW5kIG1ha2UgaXQgbW9yZSBkaWZmaWN1bHQgZm9yIHBlb3BsZSB0byBhY2Nlc3MgYWJvcnRpb24uDQoNCg0KDQoNCg0KDQoNCg0KDQoNCg0KDQoNCg0KDQoNCg0KDQoNCg0KDQoNCg0KDQoNCg==</div>
+<div id="rmd-source-code">LS0tDQp0aXRsZTogIlNUQVQgMTg0IEZpbmFsIFByb2plY3QiDQphdXRob3I6ICJZaXdlbiBIdWFuZyINCmRhdGU6ICJTdW5kYXkgYnkgMTE6NTlwbSINCm91dHB1dDogaHRtbF9ub3RlYm9vaw0KLS0tDQoNCg0KIyBTZXQgVXANCmBgYHtyLCBtZXNzYWdlID0gRkFMU0UsIHdhcm5pbmcgPSBGQUxTRX0NCiMgY2xlYW4gdXAgd29ya3NwYWNlIGVudmlyb25tZW50DQpybShsaXN0ID0gbHMoKSkNCg0KIyBhbGwgcGFja2FnZXMgdXNlZCBmb3IgdGhlIGFzc2lnbm1lbnQNCmxpYnJhcnkoRGF0YUNvbXB1dGluZykNCmxpYnJhcnkobW9zYWljKQ0KbGlicmFyeSh0aWR5dmVyc2UpDQpsaWJyYXJ5KGx1YnJpZGF0ZSkNCmxpYnJhcnkocmVhZHhsKQ0KbGlicmFyeShydmVzdCkNCmxpYnJhcnkoa25pdHIpDQpsaWJyYXJ5KG1vc2FpYykNCmxpYnJhcnkoZ2dwbG90MikNCmxpYnJhcnkodXNtYXApDQpsaWJyYXJ5KHJwYXJ0LnBsb3QpDQpsaWJyYXJ5KHJwYXJ0KQ0KYGBgDQoNCg0KIyBSZXNlYXJjaCBRdWVzdGlvbg0KDQojIyMgQXJlIFRyYXAgTGF3cyBhc3NvY2lhdGVkIHdpdGggbG93ZXIgcmVwb3J0ZWQgbGVnYWwgYWJvcnRpb24gbnVtYmVyPw0KDQoqIFRyYXAgTGF3OiBUYXJnZXRlZCByZXN0cmljdGlvbnMgb24gYWJvcnRpb24gcHJvdmlkZXJzIChUUkFQKSBsYXdzIGFyZSBjb3N0bHksIHNldmVyZSwgYW5kIG1lZGljYWxseSB1bm5lY2Vzc2FyeSByZXF1aXJlbWVudHMgaW1wb3NlZCBvbiBhYm9ydGlvbiBwcm92aWRlcnMgYW5kIHdvbWFuJ3MgaGVhbHRoIGNlbnRlcnMuIE9mdGVuIHB1c2hlZCBieSBhbnRpLWFib3J0aW9uIHBvbGl0aWNpYW5zIHVuZGVyIHRoZSBndWlzZSBvZiAid29tYW4ncyBoZWFsdGgsIiB0aGUgcmVhbCBhaW0gb2YgVFJBUCBsYXdzIGlzIHRvIHNodXQgZG93biBhYm9ydGlvbiBwcm92aWRlcnMgYW5kIG1ha2UgaXQgbW9yZSBkaWZmaWN1bHQgZm9yIHBlb3BsZSB0byBhY2Nlc3MgYWJvcnRpb24uDQoNCg0KIyBEYXRhIEFjY2Vzcw0KDQojIyMgSW1wb3J0IERhdGEgU291cmNlDQoNCiMjIyMgMS4gQWJvcnRpb24gU3VydmVpbGxhbmNlIOKAlCBVbml0ZWQgU3RhdGVzLCAyMDE1DQpgYGB7ciwgbWVzc2FnZSA9IEZBTFNFLCB3YXJuaW5nID0gRkFMU0V9DQojIEFzc2lnbiB0aGUgdXJsIGZvciBzb3VyY2UgMSB0byB2YXJpYWJsZSB1cmwxDQp1cmwxIDwtICJodHRwczovL3d3dy5jZGMuZ292L21td3Ivdm9sdW1lcy82Ny9zcy9zczY3MTNhMS5odG0/ZmJjbGlkPUl3QVIxUlZabWg2bGg0VVdTNno2akxfZndiVm0wcGZDSjlIOWF6QUs4VExTNWh3eXNzLThxTWk1dUc5dm8iDQoNCiMgU2NyYXBlIGFsbCBIVE1MIHRhYmxlcyBmb3VuZCBvbiB0aGUgd2ViIHBhZ2UgaW50byBhICJsaXN0IiBvYmplY3QgbmFtZWQgQWJvcnRpb24yMDE1IGluIHRoZSBSIGVudmlyb25tZW50DQpBYm9ydGlvbjIwMTUgPC0gdXJsMSAlPiUNCiAgcmVhZF9odG1sKGhlYWRlciA9IFRSVUUpICU+JQ0KICBodG1sX25vZGVzKGNzcyA9ICJ0YWJsZSIpICU+JQ0KICBodG1sX3RhYmxlKGZpbGwgPSBUUlVFKQ0KYGBgDQoNCiMjIyMgMi4gQWJvcnRpb24gU3VydmVpbGxhbmNlIOKAlCBVbml0ZWQgU3RhdGVzLCAyMDE2DQpgYGB7ciwgbWVzc2FnZSA9IEZBTFNFLCB3YXJuaW5nID0gRkFMU0V9DQojIEFzc2lnbiB0aGUgdXJsIGZvciBzb3VyY2UgMiB0byB2YXJpYWJsZSB1cmwyDQp1cmwyIDwtICJodHRwczovL3d3dy5jZGMuZ292L21td3Ivdm9sdW1lcy82OC9zcy9zczY4MTFhMS5odG0jVDFfZG93biINCg0KIyBTY3JhcGUgYWxsIEhUTUwgdGFibGVzIGZvdW5kIG9uIHRoZSB3ZWIgcGFnZSBpbnRvIGEgImxpc3QiIG9iamVjdCBuYW1lZCBBYm9ydGlvbjIwMTYgaW4gdGhlIFIgZW52aXJvbm1lbnQNCkFib3J0aW9uMjAxNiA8LSB1cmwyICU+JQ0KICByZWFkX2h0bWwoaGVhZGVyID0gVFJVRSkgJT4lDQogIGh0bWxfbm9kZXMoY3NzID0gInRhYmxlIikgJT4lDQogIGh0bWxfdGFibGUoZmlsbCA9IFRSVUUpDQpgYGANCg0KIyMjIyAzLiBBbnRpX0Nob2ljZSBMYXcgYnkgU3RhdGVzDQpgYGB7ciwgbWVzc2FnZSA9IEZBTFNFLCB3YXJuaW5nID0gRkFMU0V9DQojIFVzZSBmdW5jdGlvbiByZWFkLWV4Y2VsIGZyb20gcGFja2FnZSByZWFkeGwgdG8gcmVhZCBhIGxvY2FsIGV4Y2VsIGZpbGUgaW50byBhbiBSIG9iamVjdCBuYW1lZCBUcmFwTGF3DQpUcmFwTGF3IDwtIHJlYWRfZXhjZWwoIi9Vc2Vycy95aXdlbi9EZXNrdG9wL0ZBTEwgMjAyMC9TVEFUIDE4NC9GaW5hbCBQcm9qZWN0L1RyYXBMYXcueGxzeCIpDQpgYGANCg0KDQoNCg0KDQoNCg0KDQoNCg0KDQoNCg0KDQoNCg0KDQoNCg0KDQoNCg0KDQo=</div>
 
 
 
