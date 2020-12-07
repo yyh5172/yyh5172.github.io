@@ -69,6 +69,52 @@ TrapLaw <- read_excel("/Users/yiwen/Desktop/FALL 2020/STAT 184/Final Project/Tra
 ```
 
 
+### Inspecting Data Intake
+
+#### 1. Abortion Surveillance — United States, 2015
+```{r, message = FALSE, warning = FALSE}
+StatesReport2015_Raw <- Abortion2015[[2]]
+head(StatesReport2015_Raw)
+tail(StatesReport2015_Raw)
+glimpse(StatesReport2015_Raw)
+str(StatesReport2015_Raw)
+
+AgeGroup2015_Raw <- Abortion2015[[3]]
+head(AgeGroup2015_Raw)
+tail(AgeGroup2015_Raw)
+glimpse(AgeGroup2015_Raw)
+str(AgeGroup2015_Raw)
+```
+
+#### 2. Abortion Surveillance — United States, 2016
+```{r, message = FALSE, warning = FALSE}
+AnnualReport_Raw <- Abortion2016[[1]]
+head(AnnualReport_Raw)
+tail(AnnualReport_Raw)
+glimpse(AnnualReport_Raw)
+str(AnnualReport_Raw)
+
+StatesReport2016_Raw <- Abortion2016[[2]]
+head(StatesReport2016_Raw)
+tail(StatesReport2016_Raw)
+glimpse(StatesReport2016_Raw)
+str(StatesReport2016_Raw)
+
+AgeGroup2016_Raw <- Abortion2016[[3]]
+head(AgeGroup2016_Raw)
+tail(AgeGroup2016_Raw)
+glimpse(AgeGroup2016_Raw)
+str(AgeGroup2016_Raw)
+```
+
+
+#### 3. Anti_Choice Law by States
+```{r, message = FALSE, warning = FALSE}
+head(TrapLaw)
+tail(TrapLaw)
+glimpse(TrapLaw)
+str(TrapLaw)
+```
 
 
 
