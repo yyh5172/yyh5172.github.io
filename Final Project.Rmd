@@ -1,0 +1,27 @@
+---
+title: "STAT 184 Final Project"
+author: "Yiwen Huang"
+date: "Sunday by 11:59pm"
+output: html_notebook
+---
+
+
+# Set Up
+```{r, message = FALSE, warning = FALSE}
+# clean up workspace environment
+rm(list = ls())
+
+# all packages used for the assignment
+library(DataComputing)
+library(mosaic)
+library(tidyverse)
+library(lubridate)
+library(readxl)
+library(rvest)
+library(knitr)
+library(mosaic)
+library(ggplot2)
+library(usmap)
+library(rpart.plot)
+library(rpart)
+```
