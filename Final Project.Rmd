@@ -461,7 +461,7 @@ NoTrapLawStates_Comparison %>%
   na.omit() %>%
   ggplot(aes(x = `State/Area`, y = Count)) +
   geom_bar(stat = "identity", position = 'dodge', aes(color = `State Report`, fill = `State Report`, alpha = 0.25)) +
-  labs(title = "Six States Comparison 2015 & 2016") +
+  labs(title = "No Trap Law States Comparison 2015 & 2016") +
   theme(axis.text.x = element_text(angle = 60, hjust = 1), legend.position = "bottom", legend.background = element_rect(fill = "#e6e6ff", size = 0.5, linetype = "solid")) +
   facet_grid(Year ~.)
 
@@ -511,7 +511,7 @@ ggsave("AgeGroupComparison_USA.png", height = 8, width = 10)
 * `Year`
 * `Age Group`
 * `Count`
-```{r, message = FALSE, warming = FALSE, fig.height = 8, fig.width = 10, fig.align = 'center'}
+```{r, message = FALSE, warming = FALSE, fig.height = 6, fig.width = 8, fig.align = 'center'}
 NoTrapLaw_AgeGroup2015 <-
   AgeGroup2015_Clean %>%
   filter(`State/Area` %in% c("Oregon", "Montana", "Colorado", "West Virginia", "Vermont")) %>%
@@ -536,7 +536,7 @@ NoTrapLaw_AgeGroup_Comparison %>%
   theme(axis.text.x = element_text(angle = 60, hjust = 1), legend.position = "bottom", legend.background = element_rect(fill = "#e6e6ff", size = 0.5, linetype = "solid")) +
   facet_wrap( ~ Year )
 
-
+ggsave("NoTrapLawAgeGroupComparison.png", height = 6, width = 8)
 ```
 
 
