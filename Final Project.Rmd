@@ -435,7 +435,38 @@ StatesReport_Comparison %>%
 ggsave("StatesReportComparison.png", height = 8, width = 16)
 ```
 
+#### 4. Age Group Comparison in USA
 
+**Variables**
+
+* `State/Area`
+* `Year`
+* `Age Group`
+* `Count`
+```{r, message = FALSE, warming = FALSE, fig.height = 8, fig.width = 10, fig.align = 'center'}
+AgeGroup2015_Clean_Year <-
+  AgeGroup2015_Clean %>%
+  mutate(Year = rep(x = "2015", times = 48))
+
+AgeGroup2016_Clean_Year <-
+  AgeGroup2016_Clean %>%
+  mutate(Year = rep(x = "2016", times = 47))
+
+AgeGroup_Comparison_USA <-
+  rbind(AgeGroup2015_Clean_Year, AgeGroup2016_Clean_Year) %>%
+  pivot_longer(cols = c(`Age group yrs (<15)`, `Age group yrs (15–19)`, `Age group yrs (20–24)`, `Age group yrs (25–29)`, `Age group yrs (30–34)`, `Age group yrs (35–39)`, `Age group yrs (>=40)`), names_to ="Age Group", values_to = "Count")
+
+AgeGroup_Comparison_USA %>%
+  na.omit() %>%
+  ggplot(aes(x = `Age Group`, y = Count)) +
+  geom_boxplot(aes(color = `Age Group`, fill = `Age Group`), notch = TRUE, alpha = 0.25, outlier.size = 2, outlier.colour = "gray") + 
+  facet_wrap( ~ Year ) +
+  ylim(0, 12000) +
+  labs(title = "Age Group Comparison 2015 & 2016 in USA") +
+  theme(axis.text.x = element_text(angle = 60, hjust = 1), legend.position = "bottom", legend.background = element_rect(fill = "#e6e6ff", size = 0.5, linetype = "solid"))
+
+ggsave("AgeGroupComparison_USA.png", height = 8, width = 10)
+```
 
 
 
