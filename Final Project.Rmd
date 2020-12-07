@@ -117,6 +117,224 @@ str(TrapLaw)
 ```
 
 
+# Data Wrangling
+
+#### 1. StatesReport2015_Clean
+
+**Variables**
+
+* `State/Area`
+* `Residence Number`
+* `Residence Rate`
+* `Residence Ratio`
+* `Occurrence Number`
+* `Occurrence Rate`
+* `Occurrence Ratio`
+* `% obtained by out-of-state residents`
+```{r, message = FALSE, warning = FALSE}
+# Rename all the variables in StatesReport2015_Raw
+names(StatesReport2015_Raw)[2] <-paste("Residence Number")
+names(StatesReport2015_Raw)[3] <-paste("Residence Rate")
+names(StatesReport2015_Raw)[4] <-paste("Residence Ratio")
+names(StatesReport2015_Raw)[5] <-paste("Occurrence Number")
+names(StatesReport2015_Raw)[6] <-paste("Occurrence Rate")
+names(StatesReport2015_Raw)[7] <-paste("Occurrence Ratio")
+
+# Remove the redundant row of column names, create regular expression to grasp all the numerical cell values and convert those values from strings to numbers
+StatesReport2015_Clean <-
+  StatesReport2015_Raw %>%
+  filter(row_number() > 1, row_number() < 55) %>%
+  mutate(`Residence Number` = as.numeric(gsub(pattern = ",", replacement = "", x = `Residence Number`)),
+         `Residence Rate` = as.numeric(gsub(pattern = ",", replacement = "", x = `Residence Rate`)),
+         `Residence Ratio` = as.numeric(gsub(pattern = ",", replacement = "", x = `Residence Ratio`)),
+         `Occurrence Number` = as.numeric(gsub(pattern = ",", replacement = "", x = `Occurrence Number`)),
+         `Occurrence Rate` = as.numeric(gsub(pattern = ",", replacement = "", x = `Occurrence Rate`)),
+         `Occurrence Ratio` = as.numeric(gsub(pattern = ",", replacement = "", x = `Occurrence Ratio`))) %>%
+  extract(col = `% obtained by out-of-state residents§`, into = "% obtained by out-of-state residents", regex = "(\\d+\\.\\d+)" ) %>%
+  mutate(`% obtained by out-of-state residents` = as.numeric(`% obtained by out-of-state residents`))
+
+str(StatesReport2015_Clean)
+```
+
+#### 2. AgeGroup2015_Clean
+
+**Variables**
+
+* `State/Area`
+* `Age group yrs (<15)` 
+* `Age group yrs (15–19)`
+* `Age group yrs (20–24)`
+* `Age group yrs (25–29)`
+* `Age group yrs (30–34)`
+* `Age group yrs (>=40)`
+* `Total abortions reported by known age`
+```{r, message = FALSE, warning = FALSE}
+# Rename all the variables in AgeGroup2015_Raw
+names(AgeGroup2015_Raw)[2] <-paste("Age group yrs (<15)")
+names(AgeGroup2015_Raw)[3] <-paste("Age group yrs (15–19)")
+names(AgeGroup2015_Raw)[4] <-paste("Age group yrs (20–24)")
+names(AgeGroup2015_Raw)[5] <-paste("Age group yrs (25–29)")
+names(AgeGroup2015_Raw)[6] <-paste("Age group yrs (30–34)")
+names(AgeGroup2015_Raw)[7] <-paste("Age group yrs (35–39)")
+names(AgeGroup2015_Raw)[8] <-paste("Age group yrs (>=40)")
+
+# Remove the redundant row of column names, create regular expression to grasp all the numerical cell values and convert those values from strings to numbers
+AgeGroup2015_Clean <-
+  AgeGroup2015_Raw %>%
+  filter(row_number() > 2, row_number() < 51) %>%
+  extract(col = `Age group yrs (<15)`, into = "Age group yrs (<15)", regex = "(^\\d+)") %>%
+  mutate(`Age group yrs (<15)` = as.numeric(`Age group yrs (<15)`)) %>%
+  mutate(`Age group yrs (15–19)` = gsub(pattern = ",", replacement = "", x = `Age group yrs (15–19)`)) %>%
+  extract(col = `Age group yrs (15–19)`, into = "Age group yrs (15–19)", regex ="(^\\d+)") %>%
+  mutate(`Age group yrs (15–19)` = as.numeric(`Age group yrs (15–19)`)) %>%
+  mutate(`Age group yrs (20–24)` = gsub(pattern = ",", replacement = "", x = `Age group yrs (20–24)`)) %>%
+  extract(col = `Age group yrs (20–24)`, into = "Age group yrs (20–24)", regex = "(^\\d+)") %>%
+  mutate(`Age group yrs (20–24)` = as.numeric(`Age group yrs (20–24)`)) %>%
+  mutate(`Age group yrs (25–29)` = gsub(pattern = ",", replacement = "", x = `Age group yrs (25–29)`)) %>%
+  extract(col = `Age group yrs (25–29)`, into = "Age group yrs (25–29)", regex = "(^\\d+)") %>%
+  mutate(`Age group yrs (25–29)` = as.numeric(`Age group yrs (25–29)`)) %>%
+  mutate(`Age group yrs (30–34)` = gsub(pattern = ",", replacement = "", x = `Age group yrs (30–34)`)) %>%
+  extract(col = `Age group yrs (30–34)`, into = "Age group yrs (30–34)", regex = "(^\\d+)") %>%
+  mutate(`Age group yrs (30–34)` = as.numeric(`Age group yrs (30–34)`)) %>%
+  mutate(`Age group yrs (35–39)` = gsub(pattern = ",", replacement = "", x = `Age group yrs (35–39)`)) %>%
+  extract(col = `Age group yrs (35–39)`, into = "Age group yrs (35–39)", regex = "(^\\d+)") %>%
+  mutate(`Age group yrs (35–39)` = as.numeric(`Age group yrs (35–39)`)) %>%
+  mutate(`Age group yrs (>=40)` = gsub(pattern = ",", replacement = "", x = `Age group yrs (>=40)`)) %>%
+  extract(col = `Age group yrs (>=40)`, into = "Age group yrs (>=40)", regex = "(^\\d+)") %>%
+  mutate(`Age group yrs (>=40)` = as.numeric(`Age group yrs (>=40)`)) %>%
+  mutate(`Total abortions reported by known age` = gsub(pattern = ",", replacement = "", x = `Total abortions reported by known age`)) %>%
+  extract(col = `Total abortions reported by known age`, into = "Total abortions reported by known age", regex ="(^\\d+)") %>%
+  mutate(`Total abortions reported by known age` = as.numeric(`Total abortions reported by known age`))
+
+str(AgeGroup2015_Clean)
+```
+
+#### 3. StatesReport2016_Clean
+
+**Variables**
+
+* `State/Area`
+* `Residence Number`
+* `Residence Rate`
+* `Residence Ratio`
+* `Occurrence Number`
+* `Occurrence Rate`
+* `Occurrence Ratio`
+* `% obtained by out-of-state residents`
+```{r, message = FALSE, warning = FALSE}
+# Rename all the variables in AgeGroup2016_Raw
+names(StatesReport2016_Raw)[2] <-paste("Residence Number")
+names(StatesReport2016_Raw)[3] <-paste("Residence Rate")
+names(StatesReport2016_Raw)[4] <-paste("Residence Ratio")
+names(StatesReport2016_Raw)[5] <-paste("Occurrence Number")
+names(StatesReport2016_Raw)[6] <-paste("Occurrence Rate")
+names(StatesReport2016_Raw)[7] <-paste("Occurrence Ratio")
+
+# Remove the redundant row of column names, create regular expression to grasp all the numerical cell values and convert those values from strings to numbers
+StatesReport2016_Clean <-
+  StatesReport2016_Raw %>%
+  filter(row_number() > 1, row_number() < 55) %>%
+  rename(`% obtained by out-of-state residents` = `% obtained by out-of-state residents§`) %>%
+  mutate(`Residence Number` = as.numeric(gsub(pattern = ",", replacement = "", x = `Residence Number`)),
+         `Residence Rate` = as.numeric(gsub(pattern = ",", replacement = "", x = `Residence Rate`)),
+         `Residence Ratio` = as.numeric(gsub(pattern = ",", replacement = "", x = `Residence Ratio`)),
+         `Occurrence Number` = as.numeric(gsub(pattern = ",", replacement = "", x = `Occurrence Number`)),
+         `Occurrence Rate` = as.numeric(gsub(pattern = ",", replacement = "", x = `Occurrence Rate`)),
+         `Occurrence Ratio` = as.numeric(gsub(pattern = ",", replacement = "", x = `Occurrence Ratio`))) %>%
+  extract(col = `% obtained by out-of-state residents`, into = "% obtained by out-of-state residents", regex = "(\\d+\\.\\d+)" ) %>%
+  mutate(`% obtained by out-of-state residents` = as.numeric(`% obtained by out-of-state residents`))
+
+str(StatesReport2016_Clean)
+```
+
+#### 4. AgeGroup2016_Clean
+
+**Variables**
+
+* `State/Area`
+* `Age group yrs (<15)` 
+* `Age group yrs (15–19)`
+* `Age group yrs (20–24)`
+* `Age group yrs (25–29)`
+* `Age group yrs (30–34)`
+* `Age group yrs (>=40)`
+* `Total abortions reported by known age`
+```{r, message = FALSE, warning = FALSE}
+# Rename all the variables in AgeGroup2016_Raw
+names(AgeGroup2016_Raw)[1] <-paste("State/Area")
+names(AgeGroup2016_Raw)[2] <-paste("Age group yrs (<15)")
+names(AgeGroup2016_Raw)[3] <-paste("Age group yrs (15–19)")
+names(AgeGroup2016_Raw)[4] <-paste("Age group yrs (20–24)")
+names(AgeGroup2016_Raw)[5] <-paste("Age group yrs (25–29)")
+names(AgeGroup2016_Raw)[6] <-paste("Age group yrs (30–34)")
+names(AgeGroup2016_Raw)[7] <-paste("Age group yrs (35–39)")
+names(AgeGroup2016_Raw)[8] <-paste("Age group yrs (>=40)")
+names(AgeGroup2016_Raw)[9] <-paste("Total abortions reported by known age")
+
+# Remove the redundant row of column names, create regular expression to grasp all the numerical cell values and convert those values from strings to numbers
+AgeGroup2016_Clean <-
+  AgeGroup2016_Raw %>%
+  filter(row_number() > 3, row_number() < 51) %>%
+  extract(col = `Age group yrs (<15)`, into = "Age group yrs (<15)", regex = "(^\\d+)") %>%
+  mutate(`Age group yrs (<15)` = as.numeric(`Age group yrs (<15)`)) %>%
+  mutate(`Age group yrs (15–19)` = gsub(pattern = ",", replacement = "", x = `Age group yrs (15–19)`)) %>%
+  extract(col = `Age group yrs (15–19)`, into = "Age group yrs (15–19)", regex ="(^\\d+)") %>%
+  mutate(`Age group yrs (15–19)` = as.numeric(`Age group yrs (15–19)`)) %>%
+  mutate(`Age group yrs (20–24)` = gsub(pattern = ",", replacement = "", x = `Age group yrs (20–24)`)) %>%
+  extract(col = `Age group yrs (20–24)`, into = "Age group yrs (20–24)", regex = "(^\\d+)") %>%
+  mutate(`Age group yrs (20–24)` = as.numeric(`Age group yrs (20–24)`)) %>%
+  mutate(`Age group yrs (25–29)` = gsub(pattern = ",", replacement = "", x = `Age group yrs (25–29)`)) %>%
+  extract(col = `Age group yrs (25–29)`, into = "Age group yrs (25–29)", regex = "(^\\d+)") %>%
+  mutate(`Age group yrs (25–29)` = as.numeric(`Age group yrs (25–29)`)) %>%
+  mutate(`Age group yrs (30–34)` = gsub(pattern = ",", replacement = "", x = `Age group yrs (30–34)`)) %>%
+  extract(col = `Age group yrs (30–34)`, into = "Age group yrs (30–34)", regex = "(^\\d+)") %>%
+  mutate(`Age group yrs (30–34)` = as.numeric(`Age group yrs (30–34)`)) %>%
+  mutate(`Age group yrs (35–39)` = gsub(pattern = ",", replacement = "", x = `Age group yrs (35–39)`)) %>%
+  extract(col = `Age group yrs (35–39)`, into = "Age group yrs (35–39)", regex = "(^\\d+)") %>%
+  mutate(`Age group yrs (35–39)` = as.numeric(`Age group yrs (35–39)`)) %>%
+  mutate(`Age group yrs (>=40)` = gsub(pattern = ",", replacement = "", x = `Age group yrs (>=40)`)) %>%
+  extract(col = `Age group yrs (>=40)`, into = "Age group yrs (>=40)", regex = "(^\\d+)") %>%
+  mutate(`Age group yrs (>=40)` = as.numeric(`Age group yrs (>=40)`)) %>%
+  mutate(`Total abortions reported by known age` = gsub(pattern = ",", replacement = "", x = `Total abortions reported by known age`)) %>%
+  extract(col = `Total abortions reported by known age`, into = "Total abortions reported by known age", regex ="(^\\d+)") %>%
+  mutate(`Total abortions reported by known age` = as.numeric(`Total abortions reported by known age`))
+ 
+str(AgeGroup2016_Clean) 
+```
+
+#### 5. AnnualReport_Clean
+
+**Variables**
+
+* `Year`
+* `Selected reporting areas Number`
+* `Continuously reporting areas Number`
+* `Continuously reporting areas Rate`
+* `Continuously reporting areas Ratio`
+
+```{r, message = FALSE, warning = FALSE}
+# Rename all the variables in AnnualReport_Raw
+names(AnnualReport_Raw)[2] <- paste("Selected reporting areas Number")
+names(AnnualReport_Raw)[3] <- paste("Continuously reporting areas Number")
+names(AnnualReport_Raw)[4] <- paste("Continuously reporting areas Rate")
+names(AnnualReport_Raw)[5] <- paste("Continuously reporting areas Ratio")
+
+# Remove the redundant row of column names, create regular expression to grasp all the numerical cell values and convert those values from strings to numbers
+AnnualReport_Clean <-
+  AnnualReport_Raw %>%
+  filter(row_number() > 1) %>%
+  mutate(`Selected reporting areas Number` = gsub(pattern = ",", replacement = "", x = `Selected reporting areas Number`)) %>%
+  extract(col = `Selected reporting areas Number`, into = "Selected reporting areas Number", regex ="(^\\d+)") %>%
+  mutate(`Selected reporting areas Number` = as.numeric(`Selected reporting areas Number`)) %>%
+  mutate(`Continuously reporting areas Number` = gsub(pattern = ",", replacement = "", x = `Continuously reporting areas Number`)) %>%
+  extract(col = `Continuously reporting areas Number`, into = "Continuously reporting areas Number", regex ="(^\\d+)") %>%
+  mutate(`Continuously reporting areas Number` = as.numeric(`Continuously reporting areas Number`)) %>%
+  mutate(`Continuously reporting areas Rate` = as.numeric(`Continuously reporting areas Rate`)) %>%
+  mutate(`Continuously reporting areas Ratio` = as.numeric(`Continuously reporting areas Ratio`))
+
+str(AnnualReport_Clean)
+```
+
 
 
 
