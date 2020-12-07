@@ -19,10 +19,9 @@ library(lubridate)
 library(readxl)
 library(rvest)
 library(knitr)
-library(mosaic)
 library(ggplot2)
 library(usmap)
-library(ggdendro)
+library(dendextend)
 ```
 
 
@@ -434,7 +433,18 @@ StatesReport_Comparison %>%
 ggsave("StatesReportComparison.png", height = 8, width = 16)
 ```
 
-4. 2016 States Report Dendrogram
+#### 4. 2016 States Report Dendrogram
+
+**Variables**
+
+* `State/Area`
+* `Residence Number`
+* `Residence Rate`
+* `Residence Ratio`
+* `Occurrence Number`
+* `Occurrence Rate`
+* `Occurrence Ratio`
+* `% obtained by out-of-state residents`
 ```{r, message = FALSE, warming = FALSE, fig.height = 6, fig.width = 8, fig.align = 'center'}
 StatesReport2016_Clean2 <-
   na.omit(StatesReport2016_Clean)
@@ -446,15 +456,25 @@ row.names(StatesReport2016_Clean2) <- c("Alabama", "Alaska", "Arizona", "Arkansa
 Distance <-
   dist(scale(StatesReport2016_Clean2), method = "euclidean")
 
-Dendrogram <-
-  hclust(Distance, method = "ward.D2")
+# Create a vector named highlight which contains 5 No Trap Law States
+highlight <- c("Oregon", "Montana", "Colorado", "West Virginia", "Vermont" )
 
-ggdendrogram(Dendrogram)
+# Define a function named ColorLeaf to highlight specific labels in Dendrogram
+ColorLeaf <- function(x) {
+  if (is.leaf(x) && attr(x, "label") %in% highlight) {
+    attr(x, "nodePar") <- list(lab.col="#FF7F50", pch=NA)
+  }
+  return(x)
+}
 
-ggsave("2016StatesReportDendrogram.png", height = 6, width = 8)
+hc <- hclust(Distance, method = "ward.D2")
+
+Dendrogram <- dendrapply(as.dendrogram(hc), ColorLeaf)
+
+plot(Dendrogram)
 ```
 
-#### 4. No Trap Law States Report Comparison
+#### 5. No Trap Law States Report Comparison
 
 **Variables**
 
@@ -488,7 +508,7 @@ ggsave("NoTrapLawStatesReportComparison.png", height = 6, width = 8)
 ```
 
 
-#### 5. Age Group Comparison in USA
+#### 6. Age Group Comparison in USA
 
 **Variables**
 
@@ -521,7 +541,7 @@ AgeGroup_Comparison_USA %>%
 ggsave("AgeGroupComparison_USA.png", height = 8, width = 10)
 ```
 
-#### 6. Age Group Comparison in No Trap Law States
+#### 7. Age Group Comparison in No Trap Law States
 
 **Variables**
 
@@ -545,7 +565,6 @@ NoTrapLaw_AgeGroup_2016 <-
 NoTrapLaw_AgeGroup_Comparison <-
   rbind(NoTrapLaw_AgeGroup2015, NoTrapLaw_AgeGroup_2016) %>%
   pivot_longer(cols = c(`Age group yrs (<15)`, `Age group yrs (15–19)`, `Age group yrs (20–24)`, `Age group yrs (25–29)`, `Age group yrs (30–34)`, `Age group yrs (35–39)`, `Age group yrs (>=40)`), names_to ="Age Group", values_to = "Count")
-kable(NoTrapLaw_AgeGroup_Comparison)
 
 NoTrapLaw_AgeGroup_Comparison %>%
   na.omit() %>%
