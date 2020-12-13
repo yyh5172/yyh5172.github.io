@@ -29,7 +29,30 @@ library(dendextend)
 
 ### Are Trap Laws associated with lower reported legal abortion number?
 
-* Trap Law: Targeted restrictions on abortion providers (TRAP) laws are costly, severe, and medically unnecessary requirements imposed on abortion providers and woman's health centers. Often pushed by anti-abortion politicians under the guise of "woman's health," the real aim of TRAP laws is to shut down abortion providers and make it more difficult for people to access abortion.
+**Trap Law**
+
+* Targeted restrictions on abortion providers (TRAP) laws are costly, severe, and medically unnecessary requirements imposed on abortion providers and woman's health centers. 
+
+**Purpose**
+
+* Trap Laws are often pushed by anti-abortion politicians under the guise of "woman's health." A negative association can support the argument that the real aim of TRAP laws is to shut down abortion providers and make it more difficult for people to access legal abortion.
+
+**Challenge**
+
+* No tidy data: I do not have a tidy data from the start. The table has entire row represents the different levels of one variable. The table also contains redundant variables and its cell holds more than one value.
+* All the numbers from the table were recognized as strings
+
+**Solution**
+
+* I renamed all the variables in the tables and use filter to remove the redundant row of column names.
+* I created regular expression to grasp all the numerical cell values and convert those values from strings to numbers
+
+**Conclusion**
+
+* Trap Laws are associated with lower reported legal abortion number
+* Major parameter for analysis: Year(The popularization of Trap Laws increase as year goes by), six States that do not have Trap Laws
+* For further detail, please look into the data analysis I wrote down for all the data visualization I made.
+* One possible explanation for the conclusion: Targeted regulation of abortion providers has resulted in the closing of health centers — which, in turn, has delayed abortion care and even kept safe, legal abortion out of reach.
 
 
 # Data Access
@@ -356,7 +379,7 @@ ggsave("TrapLaws_Map.png", height = 15, width = 12)
 **Analysis**
 
 * **Trap Laws have been popularized across USA since 2007 and reached peak in 2016(Trump’s administration tried to push back Roe v. Wade)**
-* **Up to 2016, There are only 6 remaining States that do not have anti-choice laws against abortion: Oregon, Montana, Colorado, West Virginia, Vermont, New Hampshire**
+* **Up to 2016, There are only 6 remaining States that do not have anti-choice laws(Trap Law) against abortion and they are marked with color orange in the map: Oregon, Montana, Colorado, West Virginia, Vermont, New Hampshire**
 
 #### 2. Annual Report
 
@@ -368,7 +391,7 @@ ggsave("TrapLaws_Map.png", height = 15, width = 12)
 ```{r, message = FALSE, message = FALSE}
 AnnualReport_Clean %>%
   select(`Selected reporting areas Number`) %>%
-  summarise(total = sum(`Selected reporting areas Number`), max_selected = max(`Selected reporting areas Number`), selected = min(`Selected reporting areas Number`), mean_selected = mean(`Selected reporting areas Number`))
+  summarise(total = sum(`Selected reporting areas Number`), max_selected = max(`Selected reporting areas Number`), min_selected = min(`Selected reporting areas Number`), mean_selected = mean(`Selected reporting areas Number`))
 
 AnnualReport_Clean %>%
   select(`Continuously reporting areas Number`) %>%
@@ -389,6 +412,10 @@ AnnualReport_Clean %>%
 
 ggsave("AnnualReport.png", height = 8, width = 10)
 ```
+**Analysis**
+
+* **we can see a salient decreasing tendency here: as Trap Law became more and more popularized across states, the legal abortion number was decreasing by year. In 2016, the legal abortion number from the `Selected reporting areas` and `Continuously reporting areas` were the lowest of all time.(62347 cases for both `Selected reporting areas`and `Continuously reporting areas` ) The most rapid drop occurred between year 2008 and year 2013.**
+
 
 #### 3. States Report Comparison
 
@@ -432,6 +459,10 @@ StatesReport_Comparison %>%
 
 ggsave("StatesReportComparison.png", height = 8, width = 16)
 ```
+**Analysis**
+
+* **Using the data from 2015 and 2016 as a comparison, we can see an overall decreasing tendency. For example, the maximum reported number in 2015 was from New York for a total of 93096 while the maximum reported number in 2016 was still from New York but decreased to a total of 87325. The mean reported cases might seemed to stay relatively the same but we need to take into consideration of the fact that there was more missing data in 2016(In the original data, reported cases that lower than 20 were recorded as NA, for example for New Jersey in 2016, the reported cases were treated as NA).**
+
 
 #### 4. 2016 States Report Dendrogram
 
