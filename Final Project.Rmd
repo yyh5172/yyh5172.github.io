@@ -39,7 +39,7 @@ library(dendextend)
 
 **Challenge**
 
-* No tidy data: I do not have a tidy data from the start. The table has entire row represents the different levels of one variable. The table also contains redundant variables and its cell holds more than one value.
+* No tidy data: I do not have a tidy data from the start. The table has entire row represents the different levels of one variable. The table also contains redundant variables and its cell holds more than one value
 * All the numbers from the table were recognized as strings
 * Missing data are marked with special characters
 
@@ -175,6 +175,7 @@ StatesReport2015_Clean <-
   extract(col = `% obtained by out-of-state residents§`, into = "% obtained by out-of-state residents", regex = "(\\d+\\.\\d+)" ) %>%
   mutate(`% obtained by out-of-state residents` = as.numeric(`% obtained by out-of-state residents`))
 
+# Check whether the data are now converted to number correctly
 str(StatesReport2015_Clean)
 ```
 
@@ -228,6 +229,7 @@ AgeGroup2015_Clean <-
   extract(col = `Total abortions reported by known age`, into = "Total abortions reported by known age", regex ="(^\\d+)") %>%
   mutate(`Total abortions reported by known age` = as.numeric(`Total abortions reported by known age`))
 
+# Check whether the data are now converted to number correctly
 str(AgeGroup2015_Clean)
 ```
 
@@ -266,6 +268,7 @@ StatesReport2016_Clean <-
   extract(col = `% obtained by out-of-state residents`, into = "% obtained by out-of-state residents", regex = "(\\d+\\.\\d+)" ) %>%
   mutate(`% obtained by out-of-state residents` = as.numeric(`% obtained by out-of-state residents`))
 
+# Check whether the data are now converted to number correctly
 str(StatesReport2016_Clean)
 ```
 
@@ -321,6 +324,7 @@ AgeGroup2016_Clean <-
   extract(col = `Total abortions reported by known age`, into = "Total abortions reported by known age", regex ="(^\\d+)") %>%
   mutate(`Total abortions reported by known age` = as.numeric(`Total abortions reported by known age`))
  
+# Check whether the data are now converted to number correctly
 str(AgeGroup2016_Clean) 
 ```
 
@@ -354,6 +358,7 @@ AnnualReport_Clean <-
   mutate(`Continuously reporting areas Rate` = as.numeric(`Continuously reporting areas Rate`)) %>%
   mutate(`Continuously reporting areas Ratio` = as.numeric(`Continuously reporting areas Ratio`))
 
+# Check whether the data are now converted to number correctly
 str(AnnualReport_Clean)
 ```
 
@@ -444,12 +449,12 @@ StatesReport2016_Clean %>%
 ```
 
 ```{r, message = FALSE, warming = FALSE, fig.height = 8, fig.width = 16, fig.align = 'center'}
-# Create a new column named Year
+# Create a new column named Year in 2015
 StatesReport2015_Clean_Year <-
   StatesReport2015_Clean %>%
   mutate(Year = rep(x = "2015", times = 53))
 
-# Create a new column named Year
+# Create a new column named Year in 2016
 StatesReport2016_Clean_Year <-
   StatesReport2016_Clean %>%
   mutate(Year = rep(x ="2016", times = 53))
@@ -537,20 +542,24 @@ plot(Dendrogram)
 * `Residence Number`
 * `Occurrence Number`
 ```{r, message = FALSE, warming = FALSE, fig.height = 6, fig.width = 8, fig.align = 'center'}
+# filter out data in 2015 for 6 States that do not have Trap Laws and create a new column named Year
 NoTrapLaw_StatesReport_2015 <-
   StatesReport2015_Clean %>%
   filter(`State/Area` %in% c("Oregon", "Montana", "Colorado", "West Virginia", "Vermont", "New Hampshire¶")) %>%
   mutate(Year = rep(x = "2015", times = 6))
 
+# filter out data in 2016 for 6 States that do not have Trap Laws and create a new column named Year
 NoTrapLaw_StatesReport_2016 <-
   StatesReport2016_Clean %>%
   filter(`State/Area` %in% c("Oregon", "Montana", "Colorado", "West Virginia", "Vermont", "New Hampshire¶")) %>%
   mutate(Year = rep(x = "2016", times = 6))
 
+# Combine the data from 2015 and 2016
 NoTrapLawStates_Comparison <-
   rbind(NoTrapLaw_StatesReport_2015, NoTrapLaw_StatesReport_2016) %>%
   pivot_longer(cols = c(`Residence Number`, `Occurrence Number`), names_to = "State Report", values_to = "Count")
 
+# Created a bar graph with facet
 NoTrapLawStates_Comparison %>%
   na.omit() %>%
   ggplot(aes(x = `State/Area`, y = Count)) +
@@ -559,8 +568,12 @@ NoTrapLawStates_Comparison %>%
   theme(axis.text.x = element_text(angle = 60, hjust = 1), legend.position = "bottom", legend.background = element_rect(fill = "#e6e6ff", size = 0.5, linetype = "solid")) +
   facet_grid(Year ~.)
 
+# Save the plot
 ggsave("NoTrapLawStatesReportComparison.png", height = 6, width = 8)
 ```
+**Analysis**
+
+* **To confirm my earlier analysis, I created another bar graph with facet for States without Trap Laws specifically. According to the graph, without the impact from Trap Laws, the reported cases stay relatively the same.**
 
 
 #### 6. Age Group Comparison in USA
@@ -571,19 +584,33 @@ ggsave("NoTrapLawStatesReportComparison.png", height = 6, width = 8)
 * `Year`
 * `Age Group`
 * `Count`
+```{r, message = FALSE, message = FALSE}
+AgeGroup2015_Clean %>%
+  select(`Total abortions reported by known age`) %>%
+  summarise(total = sum(`Total abortions reported by known age`))
+
+AgeGroup2016_Clean %>%
+  select(`Total abortions reported by known age`) %>%
+  summarise(total = sum(`Total abortions reported by known age`))
+```
+
 ```{r, message = FALSE, warming = FALSE, fig.height = 8, fig.width = 10, fig.align = 'center'}
+# Create a new column named Year in 2015
 AgeGroup2015_Clean_Year <-
   AgeGroup2015_Clean %>%
   mutate(Year = rep(x = "2015", times = 48))
 
+# Create a new column named Year in 2016
 AgeGroup2016_Clean_Year <-
   AgeGroup2016_Clean %>%
   mutate(Year = rep(x = "2016", times = 47))
 
+# Combine the data from 2015 and 2016 and create a new variable named Age Group that contains 7 levels
 AgeGroup_Comparison_USA <-
   rbind(AgeGroup2015_Clean_Year, AgeGroup2016_Clean_Year) %>%
   pivot_longer(cols = c(`Age group yrs (<15)`, `Age group yrs (15–19)`, `Age group yrs (20–24)`, `Age group yrs (25–29)`, `Age group yrs (30–34)`, `Age group yrs (35–39)`, `Age group yrs (>=40)`), names_to ="Age Group", values_to = "Count")
 
+# Create a boxplot with notch and facet
 AgeGroup_Comparison_USA %>%
   na.omit() %>%
   ggplot(aes(x = `Age Group`, y = Count)) +
@@ -593,8 +620,13 @@ AgeGroup_Comparison_USA %>%
   labs(title = "Age Group Comparison 2015 & 2016 in USA") +
   theme(axis.text.x = element_text(angle = 60, hjust = 1), legend.position = "bottom", legend.background = element_rect(fill = "#e6e6ff", size = 0.5, linetype = "solid"))
 
+# Save the plot
 ggsave("AgeGroupComparison_USA.png", height = 8, width = 10)
 ```
+**Analysis**
+
+* **We already know that the data has an overall decreasing tendency from former analysis(A total of 650712 in 2015 decreased to a total of 633293 in 2015) and now I want to take a closer look at the variation. From the graph above we can tell that the variation are concentrated on three age age: 20-24, 25-29 and 30-34. Under the influence of Trap Law, those three age groups were most affected, they both had an significant increase.**
+
 
 #### 7. Age Group Comparison in No Trap Law States
 
@@ -606,21 +638,24 @@ ggsave("AgeGroupComparison_USA.png", height = 8, width = 10)
 * `Age Group`
 * `Count`
 ```{r, message = FALSE, warming = FALSE, fig.height = 6, fig.width = 8, fig.align = 'center'}
+# filter out data in 2015 for 6 States that do not have Trap Laws and create a new column named Year
 NoTrapLaw_AgeGroup2015 <-
   AgeGroup2015_Clean %>%
   filter(`State/Area` %in% c("Oregon", "Montana", "Colorado", "West Virginia", "Vermont")) %>%
   mutate(Year = rep(x = "2015", times = 5))
 
+# filter out data in 2016 for 6 States that do not have Trap Laws and create a new column named Year
 NoTrapLaw_AgeGroup_2016 <-
   AgeGroup2016_Clean %>%
   filter(`State/Area` %in% c("Oregon", "Montana", "Colorado", "West Virginia", "Vermont")) %>%
   mutate(Year = rep(x = "2016", times = 5))
   
-
+# Combine the data from 2015 and 2016 and create a new variable named Age Group that contains 7 levels
 NoTrapLaw_AgeGroup_Comparison <-
   rbind(NoTrapLaw_AgeGroup2015, NoTrapLaw_AgeGroup_2016) %>%
   pivot_longer(cols = c(`Age group yrs (<15)`, `Age group yrs (15–19)`, `Age group yrs (20–24)`, `Age group yrs (25–29)`, `Age group yrs (30–34)`, `Age group yrs (35–39)`, `Age group yrs (>=40)`), names_to ="Age Group", values_to = "Count")
 
+# Create a stacked bar graph with facet
 NoTrapLaw_AgeGroup_Comparison %>%
   na.omit() %>%
   ggplot(aes(x = `Age Group`, y = Count)) +
@@ -629,9 +664,12 @@ NoTrapLaw_AgeGroup_Comparison %>%
   theme(axis.text.x = element_text(angle = 60, hjust = 1), legend.position = "bottom", legend.background = element_rect(fill = "#e6e6ff", size = 0.5, linetype = "solid")) +
   facet_wrap( ~ Year )
 
+# Save the plot
 ggsave("NoTrapLawAgeGroupComparison.png", height = 6, width = 8)
 ```
+**Analysis**
 
+* **To confirm my earlier analysis, I created a stacked bar graph with facet for States without Trap Laws specifically. According to the graph, without the impact from Trap Laws, the variation still concentrated around the three age groups: 20-24, 25-29 and 30-34 but this time instead of increasing, they decreased.**
 
 
 
