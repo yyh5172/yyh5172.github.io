@@ -41,11 +41,12 @@ library(dendextend)
 
 * No tidy data: I do not have a tidy data from the start. The table has entire row represents the different levels of one variable. The table also contains redundant variables and its cell holds more than one value.
 * All the numbers from the table were recognized as strings
+* Missing data are marked with special characters
 
 **Solution**
 
 * I renamed all the variables in the tables and use filter to remove the redundant row of column names.
-* I created regular expression to grasp all the numerical cell values and convert those values from strings to numbers
+* I created regular expression to grasp all the numerical cell values and convert those values from strings to numbers and replace all the special characters with NA
 
 **Conclusion**
 
@@ -389,16 +390,19 @@ ggsave("TrapLaws_Map.png", height = 15, width = 12)
 * `Selected reporting areas Number`
 * `Continuously reporting areas Number`
 ```{r, message = FALSE, message = FALSE}
+# Find out the total, max, min and mean in Selected reporting areas Number
 AnnualReport_Clean %>%
   select(`Selected reporting areas Number`) %>%
   summarise(total = sum(`Selected reporting areas Number`), max_selected = max(`Selected reporting areas Number`), min_selected = min(`Selected reporting areas Number`), mean_selected = mean(`Selected reporting areas Number`))
 
+# Find out the total, max, min and mean in Continuously reporting areas Number
 AnnualReport_Clean %>%
   select(`Continuously reporting areas Number`) %>%
   summarise(total = sum(`Continuously reporting areas Number`), max_continuoulsy = max(`Continuously reporting areas Number`), min_continuously = min(`Continuously reporting areas Number`), mean_continuously = mean(`Continuously reporting areas Number`))
 ```
 
 ```{r, message = FALSE, warning = FALSE, fig.height = 8, fig.width = 10, fig.align = 'center'}
+# Create a duel Y-variable plot
 AnnualReport_Clean %>%
   ggplot(aes(x = Year)) +
   geom_line(aes(y = `Selected reporting areas Number`, group = 1, color = "red")) +
@@ -406,15 +410,16 @@ AnnualReport_Clean %>%
   geom_line(aes(y = `Continuously reporting areas Number`, group = 1, color = "blue")) +
   geom_point(aes(y = `Continuously reporting areas Number`, group = 1, color = "blue")) +
   labs(title = "Reported Legal Abortion 2007-2016", col = "Areas") +
-  scale_color_manual(labels = c("Selected reporting areas Number", "Continuously reporting areas Number"), values = c("red", "blue")) +
+  scale_color_manual(labels = c("Selected reporting areas", "Continuously reporting areas"), values = c("red", "blue")) +
   scale_y_continuous(name = "Selected reporting areas", sec.axis = sec_axis((~ . + 10), name = "Continuously reporting areas")) +
   theme(legend.position = "right", legend.background = element_rect(fill = "#e6e6ff", size = 0.5, linetype = "solid")) +
 
+# Save the plot
 ggsave("AnnualReport.png", height = 8, width = 10)
 ```
 **Analysis**
 
-* **we can see a salient decreasing tendency here: as Trap Law became more and more popularized across states, the legal abortion number was decreasing by year. In 2016, the legal abortion number from the `Selected reporting areas` and `Continuously reporting areas` were the lowest of all time.(62347 cases for both `Selected reporting areas`and `Continuously reporting areas` ) The most rapid drop occurred between year 2008 and year 2013.**
+* **we can see a salient decreasing tendency here: as Trap Law became more and more popularized across states, the legal abortion number was decreasing by year. In 2016, the legal abortion number from the `Selected reporting areas Number` and `Continuously reporting areas Number` were the lowest of all time.(62347 cases for both `Selected reporting areas Number`and `Continuously reporting areas Number` ) The most rapid drop occurred between year 2008 and year 2013.**
 
 
 #### 3. States Report Comparison
@@ -425,30 +430,36 @@ ggsave("AnnualReport.png", height = 8, width = 10)
 * `Residence Number`
 * `Occurrence Number`
 ```{r, message = FALSE, message = FALSE}
+# Find out the total, max, min and mean in 2015
 StatesReport2015_Clean %>%
-  select(`Residence Number`, `Occurrence Number`) %>%
+  select(`Occurrence Number`) %>%
   na.omit() %>%
-  summarise(max_residence = max(`Residence Number`), min_residence = min(`Residence Number`), mean_residence = mean(`Residence Number`), max_occurrence = max(`Occurrence Number`), min_occurrence = min(`Occurrence Number`), mean_occurence = mean(`Occurrence Number`))
+  summarise(total = sum(`Occurrence Number`), max_occurrence = max(`Occurrence Number`), min_occurrence = min(`Occurrence Number`), mean_occurence = mean(`Occurrence Number`))
 
+# Find out the total, max, min and mean in 2016
 StatesReport2016_Clean %>%
-  select(`Residence Number`, `Occurrence Number`) %>%
+  select(`Occurrence Number`) %>%
   na.omit() %>%
-  summarise(max_residence = max(`Residence Number`), min_residence = min(`Residence Number`), mean_residence = mean(`Residence Number`), max_occurrence = max(`Occurrence Number`), min_occurrence = min(`Occurrence Number`), mean_occurence = mean(`Occurrence Number`))
+  summarise(total = sum(`Occurrence Number`), max_occurrence = max(`Occurrence Number`), min_occurrence = min(`Occurrence Number`), mean_occurence = mean(`Occurrence Number`))
 ```
 
 ```{r, message = FALSE, warming = FALSE, fig.height = 8, fig.width = 16, fig.align = 'center'}
+# Create a new column named Year
 StatesReport2015_Clean_Year <-
   StatesReport2015_Clean %>%
   mutate(Year = rep(x = "2015", times = 53))
 
+# Create a new column named Year
 StatesReport2016_Clean_Year <-
   StatesReport2016_Clean %>%
   mutate(Year = rep(x ="2016", times = 53))
 
+# Combine the data from 2015 and 2016
 StatesReport_Comparison <-
   rbind(StatesReport2015_Clean_Year, StatesReport2016_Clean_Year) %>%
   pivot_longer(cols = c(`Residence Number`, `Occurrence Number`), names_to = "State Report", values_to = "Count")
 
+# Created a bar graph with facet
 StatesReport_Comparison %>%
   na.omit() %>%
   ggplot(aes(x = `State/Area`, y = Count)) +
@@ -457,11 +468,12 @@ StatesReport_Comparison %>%
   theme(axis.text.x = element_text(angle = 60, hjust = 1), legend.position = "bottom", legend.background = element_rect(fill = "#e6e6ff", size = 0.5, linetype = "solid")) +
   facet_grid(Year ~.)
 
+# Save the plot
 ggsave("StatesReportComparison.png", height = 8, width = 16)
 ```
 **Analysis**
 
-* **Using the data from 2015 and 2016 as a comparison, we can see an overall decreasing tendency. For example, the maximum reported number in 2015 was from New York for a total of 93096 while the maximum reported number in 2016 was still from New York but decreased to a total of 87325. The mean reported cases might seemed to stay relatively the same but we need to take into consideration of the fact that there was more missing data in 2016(In the original data, reported cases that lower than 20 were recorded as NA, for example for New Jersey in 2016, the reported cases were treated as NA).**
+* **Using the data from 2015 and 2016 as a comparison, we can see an overall decreasing tendency. For example, the total reported cases drop from 731265 to 710796, the maximum reported number in 2015 was from New York for a total of 93096 while the maximum reported number in 2016 was still from New York but decreased to a total of 87325. The mean reported cases might seemed to stay relatively the same but we need to take into consideration of the fact that there was more missing data in 2016(In the original data, reported cases that lower than 20 were recorded as NA, for example for New Jersey in 2016, the reported cases were treated as NA).**
 
 
 #### 4. 2016 States Report Dendrogram
@@ -477,13 +489,17 @@ ggsave("StatesReportComparison.png", height = 8, width = 16)
 * `Occurrence Ratio`
 * `% obtained by out-of-state residents`
 ```{r, message = FALSE, warming = FALSE, fig.height = 6, fig.width = 8, fig.align = 'center'}
+# Remove all the missing data
 StatesReport2016_Clean2 <-
   na.omit(StatesReport2016_Clean)
 
+# Convert the value in State/Area from characters to number
 StatesReport2016_Clean2$`State/Area` = as.numeric(as.factor(StatesReport2016_Clean2$`State/Area`))
 
+# Rename the row with States names accordingly
 row.names(StatesReport2016_Clean2) <- c("Alabama", "Alaska", "Arizona", "Arkansas", "Colorado", "Connecticut", "Delaware", "Georgia", "Hawaii", "Idaho", "Illinois", "Indiana", "Iowa", "Kansas", "Kentucky", "Louisiana", "Maine", "Massachusetts", "Michigan", "Minnesota", "Mississippi", "Missouri", "Montana", "Nebraska", "Nevada", "New Jersey", "New Mexico", "New York", "North Carolina", "North Dakota", "Ohio", "Oklahoma", "Oregon", "Pennsylvania", "Rhode Island", "South Carolina", "South Dakota", "Tennessee", "Texas", "Utah", "Vermont", "Virginia", "Washington", "West Virginia", "Wisconsin")
 
+# Calculate the distance between each States
 Distance <-
   dist(scale(StatesReport2016_Clean2), method = "euclidean")
 
@@ -498,12 +514,20 @@ ColorLeaf <- function(x) {
   return(x)
 }
 
+# Create the Dendrogram
 hc <- hclust(Distance, method = "ward.D2")
 
+# Apply the self-defined function to the Dendrogram
 Dendrogram <- dendrapply(as.dendrogram(hc), ColorLeaf)
 
+# Plot the Dendrogram
 plot(Dendrogram)
 ```
+**Analysis**
+
+* **Using all the data from 2016 States Report, I would like to see the distances between each States. I highlighted the States that without Trap Laws with color orange(New Hampshire's data was missing). We can see that Vermont and Oregon were very close to each other, Colorado and Montana were relatively close to each other.**
+
+
 
 #### 5. No Trap Law States Report Comparison
 
